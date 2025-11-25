@@ -7,3 +7,4 @@ _______________
 4. parse.py
 5. logic.py
 6. (bartender.py)
+заходит скелет в бар
