@@ -3,8 +3,8 @@ import random
 
 class deck52:
     def __init__(self):
-        self.cards = [x for x in range(56)]
-        self.cards_left = 56
+        self.cards = [x for x in range(52)]
+        self.cards_left = 52
 
     def draw(self):
         if self.cards_left == 0:
@@ -17,8 +17,7 @@ class deck52:
 
             card = random.choice(self.cards)
             suits = ['Spades', 'Hearts', 'Diamonds', 'Clubs']
-            values = [('1', 1),
-                      ('2', 2),
+            values = [('2', 2),
                       ('3', 3),
                       ('4', 4),
                       ('5', 5),
@@ -36,8 +35,16 @@ class deck52:
         self.cards[card] = 'N'
         self.cards_left = self.cards_left - 1
 
-        return suits[card // 14], values[card % 14]
+        return suits[card // 13], values[card % 13]
 
     def shuffle(self):
-        self.cards = [x for x in range(56)]
-        self.cards_left = 56
+        self.cards = [x for x in range(52)]
+        self.cards_left = 52
+
+
+a = deck52()
+for i in range(11):
+    a.draw()
+print(a.cards)
+a.shuffle()
+print(a.cards)
