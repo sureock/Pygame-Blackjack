@@ -1,20 +1,33 @@
+"""Модуль колоды"""
+
 import random
 
 
 class deck52:
+    """Класс deck52: колода на 52 карты"""
+
     def __init__(self):
-        self.cards = [x for x in range(52)]
+        """Инициализация колоды"""
+
+        self.base_condition = [x for x in range(52)]
+        self.cards = self.base_condition
         self.cards_left = 52
 
     def draw(self):
+        """Метод извлечения карты. Заменяет извлеченную карту на 'N'.
+
+        Returns:
+            tuple: масть (str), (достоиноство (str), значение (int)).
+
+        Raises:
+            ValueError: если колода закончилась.
+        """
+
         if self.cards_left == 0:
-            return 'There is no card to pick'
+            raise ValueError('Deck is empty, shuffle it')
 
         card = 'N'
         while card == 'N':
-            if self.cards_left == 0:
-                return 'Deck is empty'
-
             card = random.choice(self.cards)
             suits = ['Spades', 'Hearts', 'Diamonds', 'Clubs']
             values = [('2', 2),
@@ -38,13 +51,7 @@ class deck52:
         return suits[card // 13], values[card % 13]
 
     def shuffle(self):
-        self.cards = [x for x in range(52)]
+        "Возвращает колоду в базовое состояние"
+
+        self.cards = self.base_condition
         self.cards_left = 52
-
-
-a = deck52()
-for i in range(11):
-    a.draw()
-print(a.cards)
-a.shuffle()
-print(a.cards)
