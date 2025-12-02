@@ -16,8 +16,11 @@ class Button:
         self.hover_color = hover_color
         self.text_color = text_color
         self.font = pygame.font.SysFont(None, 36)
+        self.active = True
 
     def draw(self, surface):
+        if not self.active:
+            return
         mouse_pos = pygame.mouse.get_pos()
 
         # меняем цвет при наведении
@@ -33,6 +36,24 @@ class Button:
 
     def is_clicked(self, mouse_pos, clicked):
         return self.rect.collidepoint(mouse_pos) and clicked
+
+def calculate_score(hand):
+    total = 0
+    aces = 0
+
+    for suit, rank, value in hand:
+        if rank == "Ace":
+            aces += 1
+            total += 1
+        else:
+            total += value
+
+
+    if aces > 0 and total + 10 <= 21:
+        total += 10
+
+    return total
+
 
 
 def start():
@@ -88,16 +109,16 @@ def start():
                         for  i in range(2):
                             suit, (rank, value) = deck.draw()
                             player_hand.append((suit, rank, value))
-                            PLAYER += value
+                            PLAYER = calculate_score(player_hand)
                             suit, (rank, value) = deck.draw()
                             dealer_hand.append((suit, rank, value))
-                            DILER += value
+                            DILER = calculate_score(dealer_hand)
 
                     # --- Игрок берёт карту ---
                     if game_started and not game_over and issue_a_card_button.is_clicked(mouse_pos, True):
                         suit, (rank, value) = deck.draw()
                         player_hand.append((suit, rank, value))
-                        PLAYER += value
+                        PLAYER = calculate_score(player_hand)
 
                     if PLAYER > 21:
                         winner_text = "Дилер выиграл!"
@@ -111,31 +132,31 @@ def start():
                         while DILER < 16:
                             suit, (rank, value) = deck.draw()
                             dealer_hand.append((suit, rank, value))
-                            DILER += value
-                    game_over = True
+                            DILER = calculate_score(dealer_hand)
+                        game_over = True
 
 
                     if DILER > 21:
                         winner_text = "Игрок выиграл!"
-                        game_over  = True
+
 
                     if DILER > PLAYER and game_over == True and pass_button.is_clicked(mouse_pos, True):
                         winner_text = "Дилер выиграл!"
-                        game_over = True
+
 
                     elif DILER > PLAYER and game_over == False and pass_button.is_clicked(mouse_pos, False):
                         winner_text = ""
 
                     if DILER == PLAYER and game_over == True and pass_button.is_clicked(mouse_pos, True):
                         winner_text = "Ничья!"
-                        game_over = True
+
 
                     elif DILER == PLAYER and game_over == False and pass_button.is_clicked(mouse_pos, False):
                         winner_text = ""
 
                     if DILER < PLAYER and game_over == True and pass_button.is_clicked(mouse_pos, True):
                         winner_text = "Игрок победил!"
-                        game_over = True
+
 
                     elif DILER < PLAYER and game_over == False and pass_button.is_clicked(mouse_pos, False):
                         winner_text = ""
@@ -155,16 +176,17 @@ def start():
                             for i in range(2):
                                 suit, (rank, value) = deck.draw()
                                 player_hand.append((suit, rank, value))
-                                PLAYER += value
+                                PLAYER = calculate_score(player_hand)
                                 suit, (rank, value) = deck.draw()
                                 dealer_hand.append((suit, rank, value))
-                                DILER += value
+                                DILER = calculate_score(dealer_hand)
 
                     # --- Выход ---
                     if exit_button.is_clicked(mouse_pos, True):
 
                         running = False
-                        menu.start()
+                        return True, False, False
+
 
             screen.fill(gray)
 
@@ -203,8 +225,17 @@ def start():
 
 
 
-                # --- Кнопки ---
-                # Кнопка "Начать игру" показывается только если игра не началась или закончилась
+            # --- Кнопки ---
+            # Кнопка "Начать игру" показывается только если игра не началась или закончилась
+            # управление доступностью
+            start_button.active = not game_started
+            if game_started == True and game_over == False:
+                issue_a_card_button.active = True
+                pass_button.active = True
+            if game_started == True and game_over == True:
+                start_again_button.active = True
+            exit_button.active = True
+
             exit_button.draw(screen)
             if game_started == False:
                     start_button.draw(screen)
@@ -218,4 +249,4 @@ def start():
                     start_again_button.draw(screen)
 
             pygame.display.flip()
-    return
+    return True, False, False
