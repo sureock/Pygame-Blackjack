@@ -4,6 +4,7 @@ fps = 24
 white = (255,255,255)
 gray = (25,25,25)
 
+
 def start():
     button_surface = pygame.Surface((0,0))
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -11,7 +12,7 @@ def start():
     width_relative = width/1000
     height_relative = height/750 
     pygame.font.match_font('font.otf')
-    font = pygame.font.Font('font.otf',20)
+    font = pygame.font.Font('font.otf', 20)
     clock = pygame.time.Clock()
 
     text_name = pygame.image.load('logo.png').convert_alpha()

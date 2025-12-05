@@ -18,7 +18,3 @@ while running or setup or play:
         running, setup, play = setups.start()
     elif play:
         running, setup, play = game.start()
-
-
-
-
