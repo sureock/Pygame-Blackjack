@@ -4,7 +4,7 @@ import utils
 
 # import menu
 clock = pygame.time.Clock()
-fps = 24
+fps = 60
 white = (255, 255, 255)
 gray = (25, 25, 25)
 image = pygame.image.load('1.jpg')
@@ -64,7 +64,7 @@ def calculate_score(hand):
 
 # Класс для анимации карты
 class CardAnimation:
-    def __init__(self, card_data, target_pos, start_pos=None, speed=500):
+    def __init__(self, card_data, target_pos, start_pos=None, speed=9000):
         self.suit = card_data[0]
         self.rank = card_data[1]
         self.value = card_data[2]
@@ -188,7 +188,7 @@ def start():
                     # Создаем анимацию для новой карты
                     target_x = 50 + (len(player_hand) - 1) * 150
                     target_y = 50
-                    anim = CardAnimation(card_data, (target_x, target_y), deck_pos, speed=400)
+                    anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
                     player_card_animations.append(anim)
 
                     PLAYER = calculate_score(player_hand)
@@ -207,7 +207,7 @@ def start():
                         # Создаем анимацию для новой карты дилера
                         target_x = 50 + (len(dealer_hand) - 1) * 200
                         target_y = 150
-                        anim = CardAnimation(card_data, (target_x, target_y), deck_pos, speed=400)
+                        anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
                         dealer_card_animations.append(anim)
 
                         DILER = calculate_score(dealer_hand)
@@ -239,6 +239,7 @@ def start():
                     dealer_hand.clear()
                     player_card_animations.clear()
                     dealer_card_animations.clear()
+                    winner_text = ""
                     game_over = False
                     PLAYER = 0
                     DILER = 0
@@ -253,7 +254,7 @@ def start():
                         # Создаем анимацию для карты игрока
                         target_x = 50 + len(player_card_animations) * 150
                         target_y = 50
-                        anim = CardAnimation(card_data, (target_x, target_y), deck_pos, speed=400)
+                        anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
                         player_card_animations.append(anim)
 
                         # Карта дилеру
@@ -264,7 +265,7 @@ def start():
                         # Создаем анимацию для карты дилера
                         target_x = 50 + len(dealer_card_animations) * 200
                         target_y = 150
-                        anim = CardAnimation(card_data, (target_x, target_y), deck_pos, speed=400)
+                        anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
                         dealer_card_animations.append(anim)
 
                     PLAYER = calculate_score(player_hand)
