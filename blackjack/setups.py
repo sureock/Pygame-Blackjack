@@ -1,25 +1,27 @@
 import pygame
+# import pygame_scrollbar
 
 fps = 24
-white = (255,255,255)
-gray = (25,25,25)
+white = (255, 255, 255)
+gray = (25, 25, 25)
+
 
 def start():
-    button_surface = pygame.Surface((0,0))
+    button_surface = pygame.Surface((0, 0))
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     width, height = screen.get_size()
     width_relative = width/1000
     height_relative = height/750 
     pygame.font.match_font('font.otf')
-    font_name = pygame.font.Font('font.otf',32)
-    font_setup = pygame.font.Font('font.otf',18)
+    font_name = pygame.font.Font('font.otf', 32)
+    font_setup = pygame.font.Font('font.otf', 18)
     clock = pygame.time.Clock()
 
-    text_name = font_name.render("SETUP",True,white)
+    text_name = font_name.render("SETUP", True, white)
     text_name_width, text_name_height = text_name.get_size()
-    scale_text_name = pygame.transform.scale(text_name,(text_name_width*width_relative,text_name_height*height_relative))
+    scale_text_name = pygame.transform.scale(text_name, (text_name_width * width_relative, text_name_height*height_relative))
     text_name_rect = scale_text_name.get_rect()
-    text_name_rect.topleft =(20*width_relative,20*height_relative)
+    text_name_rect.topleft = (20 * width_relative, 20 * height_relative)
 
     text_1 = font_setup.render("Sound Volume",True,white)
     text_1_width, text_1_height = text_1.get_size()
