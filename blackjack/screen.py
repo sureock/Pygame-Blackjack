@@ -6,4 +6,8 @@ clock = pygame.time.Clock()
 
 pygame.init()
 
+music = pygame.mixer.music
+music.load("Play Roulette.mp3")
+music.play(loops=-1)
+
 menu.start()

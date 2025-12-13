@@ -10,9 +10,9 @@ gray = (25, 25, 25)
 
 def start():
 
-    music = pygame.mixer.music
-    music.load("Play Roulette.mp3")
-    music.play(loops=-1)
+    # music = pygame.mixer.music
+    # music.load("Play Roulette.mp3")
+    # music.play(loops=-1)
     # pygame.mixer.music.load("Play Roulette.mp3")
     # pygame.mixer.music.play()
 
