@@ -185,3 +185,36 @@ class Slider:
         button_val = self.button_rect.centerx - self.left_pos
 
         return (button_val / val_range) * (self.max - self.min) + self.min
+
+
+class Button:
+    def __init__(self, x, y, width, height, text,
+                 color=(200, 200, 200),
+                 hover_color=(170, 170, 170),
+                 text_color=(0, 0, 0)):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text = text
+        self.color = color
+        self.hover_color = hover_color
+        self.text_color = text_color
+        self.font = pygame.font.SysFont(None, 36)
+        self.active = True
+
+    def draw(self, surface):
+        if not self.active:
+            return
+        mouse_pos = pygame.mouse.get_pos()
+
+        # меняем цвет при наведении
+        if self.rect.collidepoint(mouse_pos):
+            pygame.draw.rect(surface, self.hover_color, self.rect)
+        else:
+            pygame.draw.rect(surface, self.color, self.rect)
+
+        # рисуем текст
+        text_surf = self.font.render(self.text, True, self.text_color)
+        text_rect = text_surf.get_rect(center=self.rect.center)
+        surface.blit(text_surf, text_rect)
+
+    def is_clicked(self, mouse_pos, clicked):
+        return self.rect.collidepoint(mouse_pos) and clicked
