@@ -1,7 +1,7 @@
 import pygame
 import game
 import setups
-from utils import widgets
+import utils
 
 fps = 24
 white = (255, 255, 255)
@@ -15,24 +15,37 @@ def start():
 
     button_surface = pygame.Surface((0, 0))
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    width, height = screen.get_size()
     pygame.font.match_font('font.otf')
     font = pygame.font.Font('font.otf', 20)
 
-    text_name = widgets.Text(pygame.image.load('logo.png').convert_alpha(),
-                             screen.get_size(),
-                             True)
+    tname = pygame.image.load('logo.png').convert_alpha()
+    text_name = utils.Text(tname,
+                           screen.get_size(),
+                           ((width - (tname.get_size()[0] // 2) * (width / 1000)) // 2,
+                            40),
+                           True)
 
-    text_3 = widgets.Text(font.render("EXIT", True, white),
-                          screen.get_size())
-    text_3.resize(text_3.text_height + 10)
+    t3 = font.render("EXIT", True, white)
+    t3_param = t3.get_size()[1] + 10
+    text_3 = utils.Text(t3,
+                        screen.get_size(),
+                        ((width - t3.get_size()[0] * (width / 1000)) // 2,
+                         height - t3_param * height / 750))
 
-    text_2 = widgets.Text(font.render("SETUP", True, white),
-                          screen.get_size())
-    text_2.resize(text_3.resize_param + text_2.text_height + 5)
+    t2 = font.render("SETUP", True, white)
+    t2_param = t3_param + t2.get_size()[1] + 5
+    text_2 = utils.Text(t2,
+                        screen.get_size(),
+                        ((width - t2.get_size()[0] * width / 1000) // 2,
+                         height - t2_param * height / 750))
 
-    text_1 = widgets.Text(font.render("PLAY", True, white),
-                          screen.get_size())
-    text_1.resize(text_2.resize_param + text_1.text_height + 5)
+    t1 = font.render("PLAY", True, white)
+    t1_param = t2_param + t1.get_size()[1] + 5
+    text_1 = utils.Text(t1,
+                        screen.get_size(),
+                        ((width - t1.get_size()[0] * width / 1000) // 2,
+                         height - t1_param * height / 750))
 
     running = True
     while running:
