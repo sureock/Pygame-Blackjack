@@ -1,5 +1,50 @@
 import pygame
 import math
+import os
+
+
+# здесь будет подгрузка карт из папок
+def card_load():
+    """Создание словаря{(масть, достоинство)->путь к изображению}
+
+    Returns:
+        dict
+    Raises:
+
+    """
+
+    cwd = os.getcwd()
+    suits = ['spades', 'hearts', 'diamonds', 'clubs']
+    cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+    cards_suits = {}
+    for i in suits:
+        for j in cards:
+            path = os.path.join(cwd, 'blackjack', i, j + '.png')
+            cards_suits[(i, j)] = path
+    return cards_suits
+
+
+# Класс для анимации карты
+class CardAnimation:
+    def __init__(self, card_data, target_pos, start_pos=None, speed=9000):
+        self.suit = card_data[0]
+        self.rank = card_data[1]
+        self.value = card_data[2]
+        self.target_pos = target_pos
+        self.start_pos = start_pos if start_pos else [0, 0]
+        self.current_pos = list(self.start_pos)
+        self.speed = speed
+        self.reached = False
+        self.card_text = f"{self.rank} {self.suit}"
+
+    def update(self, dt):
+        if not self.reached:
+            self.current_pos, self.reached = move_image(
+                self.current_pos,
+                self.target_pos,
+                self.speed * dt
+            )
+        return self.reached
 
 
 def move_image(start_pos, target_pos, speed, current_pos=None):
@@ -36,6 +81,24 @@ def move_image(start_pos, target_pos, speed, current_pos=None):
         current_pos[1] += dy_normalized * speed
 
     return current_pos, False
+
+
+# расчет хрен знает чего
+def calculate_score(hand):
+    total = 0
+    aces = 0
+
+    for suit, rank, value in hand:
+        if rank == "Ace":
+            aces += 1
+            total += 1
+        else:
+            total += value
+
+    if aces > 0 and total + 10 <= 21:
+        total += 10
+
+    return total
 
 
 class Text:

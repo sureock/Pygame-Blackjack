@@ -1,17 +1,16 @@
 import pygame
 from deck import deck52
-import utils
+from utils import CardAnimation, calculate_score, card_load
 
-# import menu
 clock = pygame.time.Clock()
 fps = 60
 white = (255, 255, 255)
 gray = (25, 25, 25)
-image = pygame.image.load('1.jpg')
-scale_factor = 2
-scaled_image = pygame.transform.scale_by(image, scale_factor)
+razmer_def = (63, 89)
 deck_image = pygame.image.load('deck1.jpg')
-scaled_deck = pygame.transform.scale_by(deck_image, scale_factor)
+scaled_deck = pygame.transform.scale_by(deck_image, 2)
+# загрузка карт
+cards = card_load()
 
 
 class Button:
@@ -43,46 +42,6 @@ class Button:
 
     def is_clicked(self, mouse_pos, clicked):
         return self.rect.collidepoint(mouse_pos) and clicked
-
-
-def calculate_score(hand):
-    total = 0
-    aces = 0
-
-    for suit, rank, value in hand:
-        if rank == "Ace":
-            aces += 1
-            total += 1
-        else:
-            total += value
-
-    if aces > 0 and total + 10 <= 21:
-        total += 10
-
-    return total
-
-
-# Класс для анимации карты
-class CardAnimation:
-    def __init__(self, card_data, target_pos, start_pos=None, speed=9000):
-        self.suit = card_data[0]
-        self.rank = card_data[1]
-        self.value = card_data[2]
-        self.target_pos = target_pos
-        self.start_pos = start_pos if start_pos else [0, 0]
-        self.current_pos = list(self.start_pos)
-        self.speed = speed
-        self.reached = False
-        self.card_text = f"{self.rank} {self.suit}"
-
-    def update(self, dt):
-        if not self.reached:
-            self.current_pos, self.reached = utils.move_image(
-                self.current_pos,
-                self.target_pos,
-                self.speed * dt
-            )
-        return self.reached
 
 
 def start():
@@ -125,15 +84,15 @@ def start():
     start_again_button = Button(50, HEIGHT - 120, 200, 60, "Начать заново")
 
     # Шрифты
-    font = pygame.font.SysFont(None, 48)
-    card_font = pygame.font.SysFont(None, 36)
+    font = pygame.font.Font('font.otf', 30)
+    card_font = pygame.font.Font('font.otf', 15)
 
     running = True
     while running:
         dt = clock.tick(fps) / 1000
         mouse_pos = pygame.mouse.get_pos()
-        mouse_pressed = pygame.mouse.get_pressed()[0]
-        current_time = pygame.time.get_ticks()
+        # mouse_pressed = pygame.mouse.get_pressed()[0]
+        # current_time = pygame.time.get_ticks()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -304,17 +263,16 @@ def start():
         # Карты игрока (отрисовываем с анимацией)
         for i, anim in enumerate(player_card_animations):
             # Создаем поверхность для карты
-            card_surface = pygame.Surface((140, 190))
-            card_surface.fill((255, 255, 255))
-            pygame.draw.rect(card_surface, (0, 0, 0), (0, 0, 140, 190), 3)
+            card_surface = pygame.Surface(razmer_def)
+            card_surface = pygame.transform.scale_by(card_surface, 2)
+            pygame.draw.rect(card_surface, (0, 0, 0), (0, 0, 126, 178), 2)
 
-            # Текст карты
+            # изображение карты
             if i < len(player_hand):
                 suit, rank, value = player_hand[i]
-                card_text = f"{rank} {suit}"
-                text = card_font.render(card_text, True, (0, 0, 0))
-                text_rect = text.get_rect(center=(70, 95))
-                card_surface.blit(text, text_rect)
+                image = pygame.image.load(cards[(suit, rank)])
+                scaled_image = pygame.transform.scale_by(image, 2)
+                card_surface.blit(scaled_image, (0, 0))
 
             # Рисуем карту в текущей позиции анимации
             screen.blit(card_surface, anim.current_pos)
@@ -326,26 +284,21 @@ def start():
         # Карты дилера (отрисовываем с анимацией)
         for i, anim in enumerate(dealer_card_animations):
             # Создаем поверхность для карты
-            card_surface = pygame.Surface((140, 190))
+            card_surface = pygame.Surface(razmer_def)
+            card_surface = pygame.transform.scale_by(card_surface, 2)
 
             # Первая карта дилера скрыта до конца игры
             if i == 0 and not game_over and game_started:
-                card_surface.fill((200, 50, 50))  # Красный рубашкой
-                pygame.draw.rect(card_surface, (0, 0, 0), (0, 0, 140, 190), 3)
-                # Рисуем знак вопроса
-                text = card_font.render("?", True, (255, 255, 255))
-                text_rect = text.get_rect(center=(70, 95))
-                card_surface.blit(text, text_rect)
+                pygame.draw.rect(card_surface, (0, 0, 0), (0, 0, 126, 178), 2)
+                card_surface.blit(scaled_deck, (0, 0))
             else:
-                card_surface.fill((255, 255, 255))
-                pygame.draw.rect(card_surface, (0, 0, 0), (0, 0, 140, 190), 3)
+                pygame.draw.rect(card_surface, (0, 0, 0), (0, 0, 126, 178), 2)
 
                 if i < len(dealer_hand):
                     suit, rank, value = dealer_hand[i]
-                    card_text = f"{rank} {suit}"
-                    text = card_font.render(card_text, True, (0, 0, 0))
-                    text_rect = text.get_rect(center=(70, 95))
-                    card_surface.blit(text, text_rect)
+                    image = pygame.image.load(cards[(suit, rank)])
+                    scaled_image = pygame.transform.scale_by(image, 2)
+                    card_surface.blit(scaled_image, (0, 0))
 
             # Рисуем карту в текущей позиции анимации
             screen.blit(card_surface, anim.current_pos)

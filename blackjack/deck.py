@@ -29,7 +29,7 @@ class deck52:
         card = 'N'
         while card == 'N':
             card = random.choice(self.cards)
-            suits = ['Spades', 'Hearts', 'Diamonds', 'Clubs']
+            suits = ['spades', 'hearts', 'diamonds', 'clubs']
             values = [('2', 2),
                       ('3', 3),
                       ('4', 4),
@@ -39,10 +39,10 @@ class deck52:
                       ('8', 8),
                       ('9', 9),
                       ('10', 10),
-                      ('Jack', 10),
-                      ('Queen', 10),
-                      ('King', 10),
-                      ('Ace', 11)
+                      ('J', 10),
+                      ('Q', 10),
+                      ('K', 10),
+                      ('A', 11)
                       ]
 
         self.cards[card] = 'N'
