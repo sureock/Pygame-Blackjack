@@ -1,4 +1,6 @@
 import pygame
+import game
+import setups
 
 fps = 24
 white = (255, 255, 255)
@@ -78,6 +80,9 @@ def start():
     text_1 = Text(font.render("PLAY", True, white))
     text_1.resize(text_2.resize_param + text_1.text_height + 5)
 
+    pygame.mixer.music.load("Play Roulette.mp3")
+    pygame.mixer.music.play()
+
     running = True
     while running:
 
@@ -87,17 +92,11 @@ def start():
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if text_1.button_rect.collidepoint(event.pos):
-                    play = True
-                    running = False
-                    setup = False
+                    game.start()
                 if text_2.button_rect.collidepoint(event.pos):
-                    setup = True
-                    running = False
-                    play = False
+                    setups.start()
                 if text_3.button_rect.collidepoint(event.pos):
-                    running = False
-                    setup = False
-                    play = False
+                    pygame.quit()
 
         screen.fill(gray)
         screen.blit(text_name.text_scale, text_name.text_rect)
@@ -111,5 +110,3 @@ def start():
         screen.blit(text_2.text_scale, text_2.text_rect)
         screen.blit(text_3.text_scale, text_3.text_rect)
         pygame.display.update()
-
-    return (running, setup, play)
