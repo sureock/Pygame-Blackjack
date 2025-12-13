@@ -81,3 +81,44 @@ class Text:
                                        get_relative_height(
                                             self.text_height,
                                             self.height_relative))
+
+
+class Slider:
+    def __init__(self,
+                 pos: tuple,
+                 size: tuple,
+                 initial_val: float,
+                 min: int,
+                 max: int):
+        self.pos = pos
+        self.size = size
+
+        self.left_pos = self.pos[0] - (size[0] // 2)
+        self.right_pos = self.pos[0] + (size[0] // 2)
+        self.top_pos = self.pos[1] - (size[1] // 2)
+
+        self.min = min
+        self.max = max
+        self.initial_value = (self.right_pos - self.left_pos) * initial_val
+
+        self.container_rect = pygame.Rect(self.left_pos,
+                                          self.top_pos,
+                                          self.size[0],
+                                          self.size[1])
+        self.button_rect = pygame.Rect(self.left_pos + self.initial_value - 5,
+                                       self.top_pos,
+                                       10,
+                                       self.size[1])
+
+    def move_slider(self, mouse_pos):
+        self.button_rect.centerx = mouse_pos[0]
+
+    def render(self, screen):
+        pygame.draw.rect(screen, 'darkgray', self.container_rect)
+        pygame.draw.rect(screen, 'blue', self.button_rect)
+
+    def get_value(self):
+        val_range = self.right_pos - self.left_pos - 1
+        button_val = self.button_rect.centerx - self.left_pos
+
+        return (button_val / val_range) * (self.max - self.min) + self.min

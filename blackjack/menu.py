@@ -10,8 +10,11 @@ gray = (25, 25, 25)
 
 def start():
 
-    pygame.mixer.music.load("Play Roulette.mp3")
-    pygame.mixer.music.play()
+    music = pygame.mixer.music
+    music.load("Play Roulette.mp3")
+    music.play(loops=-1)
+    # pygame.mixer.music.load("Play Roulette.mp3")
+    # pygame.mixer.music.play()
 
     button_surface = pygame.Surface((0, 0))
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -52,7 +55,9 @@ def start():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.quit()
                 running = False
+                quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if text_1.button_rect.collidepoint(event.pos):
@@ -61,6 +66,8 @@ def start():
                     setups.start()
                 if text_3.button_rect.collidepoint(event.pos):
                     pygame.quit()
+                    running = False
+                    quit()
 
         screen.fill(gray)
         screen.blit(text_name.text_scale, text_name.text_rect)

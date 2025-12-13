@@ -1,7 +1,6 @@
 import pygame
 import utils
 import menu
-# import pygame_scrollbar
 
 fps = 24
 white = (255, 255, 255)
@@ -32,6 +31,13 @@ def start():
                         screen.get_size(),
                         (25 * width_relative, add_height * height_relative))
 
+    slider = utils.Slider(((t1.get_size()[0] + 350) * width_relative,
+                           (add_height + 15) * height_relative),
+                          (500 * width_relative, t1.get_size()[1] * height_relative),
+                          pygame.mixer.music.get_volume(),
+                          0,
+                          1)
+
     t2 = font_setup.render("Deck Back View", True, white)
     add_height_1 = add_height + t1.get_size()[1] + 25
     text_2 = utils.Text(t2,
@@ -52,14 +58,24 @@ def start():
     setup = True
     while setup:
         # dt = clock.tick(fps)/1000
+        mouse_pos = pygame.mouse.get_pos()
+        mouse = pygame.mouse.get_pressed()
 
-        for event in pygame.event.get():
+        events = pygame.event.get()
+        for event in events:
+
             if event.type == pygame.QUIT:
+                pygame.quit()
                 setup = False
+                quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_3_rect.collidepoint(event.pos):
                     menu.start()
+
+            if mouse[0] and slider.container_rect.collidepoint(mouse_pos):
+                slider.move_slider(mouse_pos)
+                pygame.mixer.music.set_volume(slider.get_value())
 
         screen.fill(gray)
         screen.blit(text_name.text_scale, text_name.text_rect)
@@ -69,4 +85,6 @@ def start():
         screen.blit(text_1.text_scale, text_1.text_rect)
         screen.blit(text_2.text_scale, text_2.text_rect)
         screen.blit(text_3.text_scale, text_3.text_rect)
+
+        slider.render(screen)
         pygame.display.update()
