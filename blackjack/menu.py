@@ -18,7 +18,6 @@ def start():
     width, height = screen.get_size()
     pygame.font.match_font('font.otf')
     font = pygame.font.Font('font.otf', 20)
-    # font.outline = 
 
     tname = pygame.image.load('logo.png').convert_alpha()
     text_name = utils.Text(tname,
@@ -50,9 +49,9 @@ def start():
 
     background = utils.AnimatedBackground("back_animation.gif", width, height)
 
-    music = pygame.mixer.music
-    music.load("Play Roulette.mp3")
-    music.play(loops=-1)
+    # music = pygame.mixer.music
+    # music.load("Play Roulette.mp3")
+    # music.play(loops=-1)
 
     running = True
     while running:
@@ -67,7 +66,6 @@ def start():
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if text_1.button_rect.collidepoint(event.pos):
-                    pygame.mixer.music.stop()
                     game.start()
                 if text_2.button_rect.collidepoint(event.pos):
                     setups.start()

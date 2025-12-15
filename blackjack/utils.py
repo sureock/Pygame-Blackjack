@@ -222,11 +222,14 @@ class Button:
 
 
 class AnimatedBackground:
+    animations = {}
+
     def __init__(self, gif_path, screen_width, screen_height):
 
         def load_gif_frames(path):
             """Загружает все кадры GIF"""
             frames = []
+            durations = []
             with Image.open(path) as gif:
                 for frame in ImageSequence.Iterator(gif):
                     # Конвертируем RGBA
@@ -240,16 +243,17 @@ class AnimatedBackground:
                                                            "RGBA")
 
                     frames.append(pygame_frame)
-
-            # Получаем информацию о длительности кадров
-            durations = []
-            with Image.open(path) as gif:
-                for frame in ImageSequence.Iterator(gif):
                     durations.append(frame.info.get('duration', 100))
 
             return frames, durations
 
-        self.frames, self.durations = load_gif_frames(gif_path)
+        if gif_path not in self.animations:
+            self.frames, self.durations = load_gif_frames(gif_path)
+            self.animations[gif_path] = (self.frames, self.durations)
+        else:
+            self.frames, self.durations = self.animations[gif_path]
+
+        # self.frames, self.durations = load_gif_frames(gif_path)
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.current_frame = 0
