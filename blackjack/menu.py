@@ -10,12 +10,6 @@ gray = (25, 25, 25)
 
 def start():
 
-    # music = pygame.mixer.music
-    # music.load("Play Roulette.mp3")
-    # music.play(loops=-1)
-    # pygame.mixer.music.load("Play Roulette.mp3")
-    # pygame.mixer.music.play()
-
     button_surface = pygame.Surface((0, 0))
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     width, height = screen.get_size()

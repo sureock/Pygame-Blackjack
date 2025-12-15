@@ -39,10 +39,10 @@ def start():
 
     winner_text = ""  # текст победителя
     game_started = False
-    game_over = False
+    game_over = True
 
     start_button = Button(50, HEIGHT - 120, 200, 60, "Начать игру")
-    issue_a_card_button = Button(WIDTH // 2 - 100,
+    card_button = Button(WIDTH // 2 - 100,
                                  HEIGHT - 160, 200, 60, "Взять карту")
     pass_button = Button(WIDTH // 2 - 100, HEIGHT - 80, 200, 60, "Пас",
                          color=(255, 100, 100), hover_color=(255, 150, 150))
@@ -88,7 +88,7 @@ def start():
                 quit()
             # --- Начать игру / Начать заново ---
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                if start_button.is_clicked(mouse_pos, True):
+                if start_button.is_clicked(mouse_pos, True) and game_over:
                     game_started = True
                     game_over = False
                     winner_text = ""
@@ -112,7 +112,7 @@ def start():
                     DILER = calculate_score(dealer_hand)
 
                 # --- Игрок берёт карту ---
-                if issue_a_card_button.is_clicked(mouse_pos, True):
+                if card_button.is_clicked(mouse_pos, True) and not game_over:
                     draw_player()
 
                     PLAYER = calculate_score(player_hand)
@@ -122,7 +122,7 @@ def start():
                         game_over = True
 
                 # --- Игрок пасует ---
-                if pass_button.is_clicked(mouse_pos, True):
+                if pass_button.is_clicked(mouse_pos, True) and not game_over:
                     while DILER < 16:
                         draw_dealer()
 
@@ -132,13 +132,13 @@ def start():
                 if DILER > 21:
                     winner_text = "Игрок выиграл!"
 
-                if DILER > PLAYER and game_over and pass_button.is_clicked(mouse_pos, True):
+                if DILER > PLAYER and game_over:
                     winner_text = "Дилер выиграл!"
 
-                if DILER == PLAYER and game_over and pass_button.is_clicked(mouse_pos, True):
+                if DILER == PLAYER and game_over:
                     winner_text = "Ничья!"
 
-                if DILER < PLAYER and game_over and pass_button.is_clicked(mouse_pos, True):
+                if DILER < PLAYER and game_over:
                     winner_text = "Игрок победил!"
 
                 # --- Выход ---
@@ -204,12 +204,15 @@ def start():
             screen.blit(card_surface, anim.current_pos)
 
         # Очки дилера (показываем только после паса или если игрок проиграл)
-        dealer_score_text = font.render(f"Очки дилера: {DILER if game_over else '??'}", True, white)
+        dealer_text = f"Очки дилера: {DILER if game_over else '??'}"
+        dealer_score_text = font.render(dealer_text, True, white)
         screen.blit(dealer_score_text, (50, 450))
 
         if winner_text:
             winner_render = font.render(winner_text, True, (255, 255, 0))
-            screen.blit(winner_render, (WIDTH // 2 - winner_render.get_width() // 2, HEIGHT // 2))
+            screen.blit(winner_render,
+                        (WIDTH // 2 - winner_render.get_width() // 2,
+                         HEIGHT // 2))
 
         exit_button.draw(screen)
         if not game_started:
@@ -217,7 +220,7 @@ def start():
 
         # Кнопки "Взять карту" и "Пас" активны только во время игры
         if game_started and not game_over:
-            issue_a_card_button.draw(screen)
+            card_button.draw(screen)
             pass_button.draw(screen)
         if game_started and game_over:
             start_again_button.draw(screen)
