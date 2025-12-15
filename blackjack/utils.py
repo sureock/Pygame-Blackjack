@@ -20,7 +20,7 @@ def card_load():
     cards_suits = {}
     for i in suits:
         for j in cards:
-            path = os.path.join(cwd, 'blackjack', i, j + '.png')
+            path = os.path.join(cwd, i, j + '.png')
             cards_suits[(i, j)] = path
     return cards_suits
 
