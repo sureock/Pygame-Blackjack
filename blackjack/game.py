@@ -2,6 +2,7 @@ import pygame
 from deck import deck52
 from utils import CardAnimation, calculate_score, card_load, Button
 import menu
+from sys import exit
 
 clock = pygame.time.Clock()
 fps = 60
@@ -85,7 +86,7 @@ def start():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 running = False
-                quit()
+                exit()
             # --- Начать игру / Начать заново ---
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if start_button.is_clicked(mouse_pos, True) and game_over:
@@ -129,13 +130,13 @@ def start():
                         DILER = calculate_score(dealer_hand)
                     game_over = True
 
-                if DILER > 21:
+                if DILER > 21 and game_over:
                     winner_text = "Игрок выиграл!"
 
                 if DILER > PLAYER and game_over:
                     winner_text = "Дилер выиграл!"
 
-                if DILER == PLAYER and game_over:
+                if DILER == PLAYER and DILER != 0 and game_over:
                     winner_text = "Ничья!"
 
                 if DILER < PLAYER and game_over:

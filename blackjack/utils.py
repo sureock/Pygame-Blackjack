@@ -1,6 +1,7 @@
 import pygame
 import math
 import os
+from PIL import Image, ImageSequence
 
 
 # здесь будет подгрузка карт из папок
@@ -218,3 +219,59 @@ class Button:
 
     def is_clicked(self, mouse_pos, clicked):
         return self.rect.collidepoint(mouse_pos) and clicked
+
+
+class AnimatedBackground:
+    def __init__(self, gif_path, screen_width, screen_height):
+
+        def load_gif_frames(path):
+            """Загружает все кадры GIF"""
+            frames = []
+            with Image.open(path) as gif:
+                for frame in ImageSequence.Iterator(gif):
+                    # Конвертируем RGBA
+                    frame = frame.convert("RGBA")
+
+                    # Конвертируем PIL Image в PyGame Surface
+                    frame_data = frame.tobytes()
+                    frame_size = frame.size
+                    pygame_frame = pygame.image.fromstring(frame_data,
+                                                           frame_size,
+                                                           "RGBA")
+
+                    frames.append(pygame_frame)
+
+            # Получаем информацию о длительности кадров
+            durations = []
+            with Image.open(path) as gif:
+                for frame in ImageSequence.Iterator(gif):
+                    durations.append(frame.info.get('duration', 100))
+
+            return frames, durations
+
+        self.frames, self.durations = load_gif_frames(gif_path)
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        self.current_frame = 0
+        self.animation_time = 0
+        self.scaled_frames = []
+
+        # Масштабируем кадры под размер экрана
+        for frame in self.frames:
+            scaled = pygame.transform.scale(frame,
+                                            (screen_width,
+                                             screen_height))
+            self.scaled_frames.append(scaled)
+
+    def update(self, dt):
+        """Обновление анимации"""
+        self.animation_time += dt
+
+        # Переход к следующему кадру по времени
+        if self.animation_time >= self.durations[self.current_frame]:
+            self.animation_time = 0
+            self.current_frame = (self.current_frame + 1) % len(self.frames)
+
+    def draw(self, screen):
+        """Отрисовка текущего кадра"""
+        screen.blit(self.scaled_frames[self.current_frame], (0, 0))

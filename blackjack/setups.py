@@ -1,6 +1,7 @@
 import pygame
 import utils
 import menu
+from sys import exit
 
 fps = 24
 white = (255, 255, 255)
@@ -67,7 +68,7 @@ def start():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 setup = False
-                quit()
+                exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_3_rect.collidepoint(event.pos):
