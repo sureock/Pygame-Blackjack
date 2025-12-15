@@ -89,11 +89,9 @@ def start():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 running = False
-<<<<<<< HEAD
                 sys.exit()
-=======
                 exit()
->>>>>>> 28899bc927a42a252aa0e0c6746966b3b799fc11
+
             # --- Начать игру / Начать заново ---
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if start_button.is_clicked(mouse_pos, True) and game_over:
@@ -137,24 +135,24 @@ def start():
                         DILER = calculate_score(dealer_hand)
                     game_over = True
 
-<<<<<<< HEAD
+
                     if DILER > 21:
                         winner_text = "Игрок выиграл!"
-=======
-                if DILER > 21 and game_over:
-                    winner_text = "Игрок выиграл!"
->>>>>>> 28899bc927a42a252aa0e0c6746966b3b799fc11
+
+                    if DILER > 21 and game_over:
+                        winner_text = "Игрок выиграл!"
+
 
                     elif DILER > PLAYER and game_over:
                         winner_text = "Дилер выиграл!"
 
-<<<<<<< HEAD
+
                     if DILER == PLAYER and game_over:
                         winner_text = "Ничья!"
-=======
-                if DILER == PLAYER and DILER != 0 and game_over:
-                    winner_text = "Ничья!"
->>>>>>> 28899bc927a42a252aa0e0c6746966b3b799fc11
+
+                    if DILER == PLAYER and DILER != 0 and game_over:
+                        winner_text = "Ничья!"
+
 
                     if DILER < PLAYER and game_over:
                         winner_text = "Игрок победил!"
