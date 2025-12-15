@@ -78,7 +78,7 @@ def start():
         anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
         dealer_card_animations.append(anim)
 
-    
+
 
     running = True
     while running:
