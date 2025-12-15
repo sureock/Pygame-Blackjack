@@ -1,4 +1,6 @@
 import pygame
+import sys
+import gc
 from deck import deck52
 from utils import CardAnimation, calculate_score, card_load, Button
 import menu
@@ -15,7 +17,6 @@ cards = card_load()
 
 
 def start():
-    pygame.init()
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     WIDTH, HEIGHT = screen.get_size()
     pygame.display.set_caption('blackjack')
@@ -54,38 +55,40 @@ def start():
     font = pygame.font.Font('font.otf', 30)
     # card_font = pygame.font.Font('font.otf', 15)
 
+    def draw_player():
+        suit, (rank, value) = deck.draw()
+        card_data = (suit, rank, value)
+        player_hand.append(card_data)
+
+        # Создаем анимацию для новой карты
+        target_x = 50 + (len(player_hand) - 1) * 150
+        target_y = 50
+        anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
+        player_card_animations.append(anim)
+
+    def draw_dealer():
+        suit, (rank, value) = deck.draw()
+        card_data = (suit, rank, value)
+        dealer_hand.append(card_data)
+
+        # Создаем анимацию для карты дилера (скрываем первую)
+        target_x = 50 + len(dealer_card_animations) * 200
+        target_y = 150
+        anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
+        dealer_card_animations.append(anim)
+
+    
+
     running = True
     while running:
         dt = clock.tick(fps) / 1000
         mouse_pos = pygame.mouse.get_pos()
 
-        def draw_player():
-            suit, (rank, value) = deck.draw()
-            card_data = (suit, rank, value)
-            player_hand.append(card_data)
-
-            # Создаем анимацию для новой карты
-            target_x = 50 + (len(player_hand) - 1) * 150
-            target_y = 50
-            anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
-            player_card_animations.append(anim)
-
-        def draw_dealer():
-            suit, (rank, value) = deck.draw()
-            card_data = (suit, rank, value)
-            dealer_hand.append(card_data)
-
-            # Создаем анимацию для карты дилера (скрываем первую)
-            target_x = 50 + len(dealer_card_animations) * 200
-            target_y = 150
-            anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
-            dealer_card_animations.append(anim)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 running = False
-                quit()
+                sys.exit()
             # --- Начать игру / Начать заново ---
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if start_button.is_clicked(mouse_pos, True) and game_over:
@@ -129,21 +132,22 @@ def start():
                         DILER = calculate_score(dealer_hand)
                     game_over = True
 
-                if DILER > 21:
-                    winner_text = "Игрок выиграл!"
+                    if DILER > 21:
+                        winner_text = "Игрок выиграл!"
 
-                if DILER > PLAYER and game_over:
-                    winner_text = "Дилер выиграл!"
+                    elif DILER > PLAYER and game_over:
+                        winner_text = "Дилер выиграл!"
 
-                if DILER == PLAYER and game_over:
-                    winner_text = "Ничья!"
+                    if DILER == PLAYER and game_over:
+                        winner_text = "Ничья!"
 
-                if DILER < PLAYER and game_over:
-                    winner_text = "Игрок победил!"
+                    if DILER < PLAYER and game_over:
+                        winner_text = "Игрок победил!"
 
                 # --- Выход ---
                 if exit_button.is_clicked(mouse_pos, True):
-                    menu.start()
+                    running = False
+                    return
 
         screen.fill(gray)
 
@@ -225,4 +229,6 @@ def start():
         if game_started and game_over:
             start_again_button.draw(screen)
 
+
         pygame.display.flip()
+    pygame.quit()
