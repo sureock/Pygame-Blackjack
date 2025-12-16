@@ -1,6 +1,7 @@
 import pygame
 import game
 import setups
+import leaderboard
 import utils
 from sys import exit
 
@@ -26,11 +27,18 @@ def start():
                             40),
                            True)
 
-    t3 = font.render("EXIT", True, white, gray)
-    t3_param = t3.get_size()[1] + 10
+    t4 = font.render("EXIT", True, white, gray)
+    t4_param = t4.get_size()[1] + 10
+    text_4 = utils.Text(t4,
+                        screen.get_size(),
+                        ((width - t4.get_size()[0] * (width / 1000)) // 2,
+                         height - t4_param * height / 750))
+    
+    t3 = font.render("LEADERBOARD", True, white, gray)
+    t3_param = t4_param + t3.get_size()[1] + 5
     text_3 = utils.Text(t3,
                         screen.get_size(),
-                        ((width - t3.get_size()[0] * (width / 1000)) // 2,
+                        ((width - t3.get_size()[0] * width / 1000) // 2,
                          height - t3_param * height / 750))
 
     t2 = font.render("SETUP", True, white, gray)
@@ -49,10 +57,6 @@ def start():
 
     background = utils.AnimatedBackground("back_animation.gif", width, height)
 
-    # music = pygame.mixer.music
-    # music.load("Play Roulette.mp3")
-    # music.play(loops=-1)
-
     running = True
     while running:
 
@@ -70,6 +74,8 @@ def start():
                 if text_2.button_rect.collidepoint(event.pos):
                     setups.start()
                 if text_3.button_rect.collidepoint(event.pos):
+                    leaderboard.start()
+                if text_4.button_rect.collidepoint(event.pos):
                     pygame.quit()
                     running = False
                     exit()
@@ -84,11 +90,12 @@ def start():
                     (text_2.button_rect.x, text_2.button_rect.y))
         screen.blit(button_surface,
                     (text_3.button_rect.x, text_3.button_rect.y))
+        screen.blit(button_surface,
+                    (text_4.button_rect.x, text_4.button_rect.y))
         screen.blit(text_1.text_scale, text_1.text_rect)
         screen.blit(text_2.text_scale, text_2.text_rect)
         screen.blit(text_3.text_scale, text_3.text_rect)
+        screen.blit(text_4.text_scale, text_4.text_rect)
 
-        # pygame.display.update()
         pygame.display.flip()
 
-        # clock.tick(60)
