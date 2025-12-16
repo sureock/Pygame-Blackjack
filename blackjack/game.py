@@ -1,9 +1,9 @@
 import pygame
 import sys
-import gc
+# import gc
 from deck import deck52
 from utils import CardAnimation, calculate_score, card_load, Button
-import menu
+# import menu
 from sys import exit
 
 clock = pygame.time.Clock()
@@ -12,7 +12,8 @@ white = (255, 255, 255)
 gray = (25, 25, 25)
 razmer_def = (63, 89)
 deck_image = pygame.image.load('deck1.jpg')
-scaled_deck = pygame.transform.scale_by(deck_image, 2)
+scaled_deck = pygame.transform.scale_by(deck_image, 1.7)
+
 # загрузка карт
 cards = card_load()
 
@@ -20,6 +21,8 @@ cards = card_load()
 def start():
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     WIDTH, HEIGHT = screen.get_size()
+    background = pygame.image.load('hueta.png')
+    background = pygame.transform.scale(background, (WIDTH, HEIGHT))
     pygame.display.set_caption('blackjack')
     clock = pygame.time.Clock()
 
@@ -44,8 +47,8 @@ def start():
     game_over = True
 
     start_button = Button(50, HEIGHT - 120, 200, 60, "Начать игру")
-    card_button = Button(WIDTH // 2 - 100,
-                                 HEIGHT - 160, 200, 60, "Взять карту")
+    card_button = Button(WIDTH // 2 - 100, HEIGHT - 160, 200, 60, "Взять карту"
+                         )
     pass_button = Button(WIDTH // 2 - 100, HEIGHT - 80, 200, 60, "Пас",
                          color=(255, 100, 100), hover_color=(255, 150, 150))
     exit_button = Button(WIDTH - 250, HEIGHT - 120, 200, 60, "Выход",
@@ -62,8 +65,8 @@ def start():
         player_hand.append(card_data)
 
         # Создаем анимацию для новой карты
-        target_x = 50 + (len(player_hand) - 1) * 150
-        target_y = 50
+        target_x = WIDTH/2.14256 + (len(player_hand) - 1) * 50
+        target_y = WIDTH/2.45 + (len(player_hand) - 1) * 50
         anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
         player_card_animations.append(anim)
 
@@ -73,12 +76,10 @@ def start():
         dealer_hand.append(card_data)
 
         # Создаем анимацию для карты дилера (скрываем первую)
-        target_x = 50 + len(dealer_card_animations) * 200
-        target_y = 150
+        target_x = WIDTH // 2 - 200 + len(dealer_card_animations) * 200
+        target_y = HEIGHT // 2 - 100
         anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
         dealer_card_animations.append(anim)
-
-
 
     running = True
     while running:
@@ -135,24 +136,20 @@ def start():
                         DILER = calculate_score(dealer_hand)
                     game_over = True
 
-
                     if DILER > 21:
                         winner_text = "Игрок выиграл!"
 
                     if DILER > 21 and game_over:
                         winner_text = "Игрок выиграл!"
 
-
                     elif DILER > PLAYER and game_over:
                         winner_text = "Дилер выиграл!"
-
 
                     if DILER == PLAYER and game_over:
                         winner_text = "Ничья!"
 
                     if DILER == PLAYER and DILER != 0 and game_over:
                         winner_text = "Ничья!"
-
 
                     if DILER < PLAYER and game_over:
                         winner_text = "Игрок победил!"
@@ -162,10 +159,10 @@ def start():
                     running = False
                     return
 
-        screen.fill(gray)
+        screen.blit(background, (0, 0))  # (0,0) - верхний левый угол
 
         # Рисуем колоду
-        screen.blit(scaled_deck, deck_pos)
+        # screen.blit(scaled_deck, deck_pos)
 
         # Анимации карт игрока
         for anim in player_card_animations:
@@ -181,28 +178,28 @@ def start():
         for i, anim in enumerate(player_card_animations):
             # Создаем поверхность для карты
             card_surface = pygame.Surface(razmer_def)
-            card_surface = pygame.transform.scale_by(card_surface, 2)
+            card_surface = pygame.transform.scale_by(card_surface, 1.8)
             pygame.draw.rect(card_surface, (0, 0, 0), (0, 0, 126, 178), 2)
 
             # изображение карты
             if i < len(player_hand):
                 suit, rank, value = player_hand[i]
                 image = pygame.image.load(cards[(suit, rank)])
-                scaled_image = pygame.transform.scale_by(image, 2)
+                scaled_image = pygame.transform.scale_by(image, 1.8)
                 card_surface.blit(scaled_image, (0, 0))
 
             # Рисуем карту в текущей позиции анимации
             screen.blit(card_surface, anim.current_pos)
 
         # Очки игрока
-        score_text = font.render(f"Очки игрока: {PLAYER}", True, white)
-        screen.blit(score_text, (50, 250))
+        # score_text = font.render(f"Очки игрока: {PLAYER}", True, white)
+        # screen.blit(score_text, (50, 250))
 
         # Карты дилера (отрисовываем с анимацией)
         for i, anim in enumerate(dealer_card_animations):
             # Создаем поверхность для карты
             card_surface = pygame.Surface(razmer_def)
-            card_surface = pygame.transform.scale_by(card_surface, 2)
+            card_surface = pygame.transform.scale_by(card_surface, 1.7)
 
             # Первая карта дилера скрыта до конца игры
             if i == 0 and not game_over and game_started:
@@ -214,22 +211,22 @@ def start():
                 if i < len(dealer_hand):
                     suit, rank, value = dealer_hand[i]
                     image = pygame.image.load(cards[(suit, rank)])
-                    scaled_image = pygame.transform.scale_by(image, 2)
+                    scaled_image = pygame.transform.scale_by(image, 1.7)
                     card_surface.blit(scaled_image, (0, 0))
 
             # Рисуем карту в текущей позиции анимации
             screen.blit(card_surface, anim.current_pos)
 
         # Очки дилера (показываем только после паса или если игрок проиграл)
-        dealer_text = f"Очки дилера: {DILER if game_over else '??'}"
-        dealer_score_text = font.render(dealer_text, True, white)
-        screen.blit(dealer_score_text, (50, 450))
+        # dealer_text = f"Очки дилера: {DILER if game_over else '??'}"
+        # dealer_score_text = font.render(dealer_text, True, white)
+        # screen.blit(dealer_score_text, (50, 450))
 
         if winner_text:
             winner_render = font.render(winner_text, True, (255, 255, 0))
             screen.blit(winner_render,
                         (WIDTH // 2 - winner_render.get_width() // 2,
-                         HEIGHT // 2))
+                         HEIGHT // 2 + 50))
 
         exit_button.draw(screen)
         if not game_started:
@@ -241,7 +238,6 @@ def start():
             pass_button.draw(screen)
         if game_started and game_over:
             start_again_button.draw(screen)
-
 
         pygame.display.flip()
     pygame.quit()

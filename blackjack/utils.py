@@ -27,7 +27,7 @@ def card_load():
 
 # Класс для анимации карты
 class CardAnimation:
-    def __init__(self, card_data, target_pos, start_pos=None, speed=9000):
+    def __init__(self, card_data, target_pos, start_pos=None, speed=5000):
         self.suit = card_data[0]
         self.rank = card_data[1]
         self.value = card_data[2]
