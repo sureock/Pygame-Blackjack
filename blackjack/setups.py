@@ -72,7 +72,7 @@ def start():
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_3_rect.collidepoint(event.pos):
-                    menu.start()
+                    setup = False
 
             if mouse[0] and slider.container_rect.collidepoint(mouse_pos):
                 slider.move_slider(mouse_pos)
@@ -89,3 +89,4 @@ def start():
 
         slider.render(screen)
         pygame.display.update()
+
