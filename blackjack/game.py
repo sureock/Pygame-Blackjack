@@ -1,10 +1,10 @@
 import pygame
-import sys
 # import gc
 from deck import deck52
 from utils import CardAnimation, calculate_score, card_load, Button
 # import menu
 from sys import exit
+import bdclass
 
 clock = pygame.time.Clock()
 fps = 60
@@ -18,13 +18,15 @@ scaled_deck = pygame.transform.scale_by(deck_image, 1.7)
 cards = card_load()
 
 
-def start():
+def start(name):
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     WIDTH, HEIGHT = screen.get_size()
     background = pygame.image.load('hueta.png')
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
     pygame.display.set_caption('blackjack')
     clock = pygame.time.Clock()
+
+    score_service = bdclass.Scorelist(name)
 
     # Создаём объект колоды
     deck = deck52()
@@ -66,7 +68,7 @@ def start():
 
         # Создаем анимацию для новой карты
         target_x = WIDTH/2.14256 + (len(player_hand) - 1) * 50
-        target_y = WIDTH/2.45 + (len(player_hand) - 1) * 50
+        target_y = HEIGHT/1.75 + (len(player_hand) - 1) * 50
         anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
         player_card_animations.append(anim)
 
@@ -77,7 +79,7 @@ def start():
 
         # Создаем анимацию для карты дилера (скрываем первую)
         target_x = WIDTH // 2 - 200 + len(dealer_card_animations) * 200
-        target_y = HEIGHT // 2 - 100
+        target_y = HEIGHT / 2.5 - 100
         anim = CardAnimation(card_data, (target_x, target_y), deck_pos)
         dealer_card_animations.append(anim)
 
@@ -90,7 +92,6 @@ def start():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 running = False
-                sys.exit()
                 exit()
 
             # --- Начать игру / Начать заново ---
@@ -126,6 +127,7 @@ def start():
 
                     if PLAYER > 21:
                         winner_text = "Дилер выиграл!"
+                        score_service.score_plus("lose")
                         game_over = True
 
                 # --- Игрок пасует ---
@@ -138,12 +140,15 @@ def start():
 
                     if DILER > 21:
                         winner_text = "Игрок выиграл!"
+                        score_service.score_plus("win")
 
                     if DILER > 21 and game_over:
                         winner_text = "Игрок выиграл!"
+                        score_service.score_plus("win")
 
                     elif DILER > PLAYER and game_over:
                         winner_text = "Дилер выиграл!"
+                        score_service.score_plus("lose")
 
                     if DILER == PLAYER and game_over:
                         winner_text = "Ничья!"
@@ -153,6 +158,7 @@ def start():
 
                     if DILER < PLAYER and game_over:
                         winner_text = "Игрок победил!"
+                        score_service.score_plus("win")
 
                 # --- Выход ---
                 if exit_button.is_clicked(mouse_pos, True):
