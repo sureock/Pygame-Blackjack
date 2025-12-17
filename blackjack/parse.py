@@ -6,7 +6,7 @@ def get_args():
     """Функция получения аргументов из командной строки.
 
     Returns:
-        tuple: имя игрока, размер окна.
+        tuple: имя игрока, пароль.
     """
 
     parser = argparse.ArgumentParser(
@@ -18,11 +18,11 @@ def get_args():
         help='Имя игрока'
     )
     parser.add_argument(
-        '-s', '--size',
+        '-p', '--password',
         type=str,
-        choices=['fullscreen', 'windowed'],
-        default='windowed',
-        help='Размер окна'
+        action='store',
+        default='12345',
+        help='Пароль'
     )
     args = parser.parse_args()
-    return (args.user, args.size)
+    return (args.user, args.password)
