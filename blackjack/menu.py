@@ -10,7 +10,7 @@ white = (255, 255, 255)
 gray = (25, 25, 25)
 
 
-def start():
+def start(name):
 
     button_surface = pygame.Surface((0, 0))
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -70,7 +70,7 @@ def start():
 
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if text_1.button_rect.collidepoint(event.pos):
-                    game.start()
+                    game.start(name)
                 if text_2.button_rect.collidepoint(event.pos):
                     setups.start()
                 if text_3.button_rect.collidepoint(event.pos):
