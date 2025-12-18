@@ -229,10 +229,10 @@ def start(name):
         # screen.blit(dealer_score_text, (50, 450))
 
         if winner_text:
-            winner_render = font.render(winner_text, True, (255, 255, 0))
+            winner_render = font.render(winner_text, True, (255, 255, 255))
             screen.blit(winner_render,
                         (WIDTH // 2 - winner_render.get_width() // 2,
-                         HEIGHT // 2 + 50))
+                         HEIGHT // 2))
 
         exit_button.draw(screen)
         if not game_started:
