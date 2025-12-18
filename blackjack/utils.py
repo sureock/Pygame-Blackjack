@@ -90,7 +90,7 @@ def calculate_score(hand):
     aces = 0
 
     for suit, rank, value in hand:
-        if rank == "Ace":
+        if rank == "A":
             aces += 1
             total += 1
         else:
