@@ -21,7 +21,7 @@ cards = card_load()
 def start(name):
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     WIDTH, HEIGHT = screen.get_size()
-    background = pygame.image.load('hueta.png')
+    background = pygame.image.load('board.png')
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
     pygame.display.set_caption('blackjack')
     clock = pygame.time.Clock()
