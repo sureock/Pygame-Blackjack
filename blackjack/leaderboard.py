@@ -1,3 +1,5 @@
+"""Модуль вывода табллицы лидеров"""
+
 import pygame
 import utils
 import bdclass

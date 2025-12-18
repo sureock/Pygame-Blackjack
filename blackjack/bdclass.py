@@ -1,3 +1,4 @@
+"""Модуль для работы с базой данных на основе библиотеки sqlalchemy."""
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 

@@ -3,6 +3,7 @@ import pygame
 import parse
 import bdclass
 
+
 def main():
     def call_game(name):
         pygame.display.set_caption('Blackjack')
@@ -10,11 +11,10 @@ def main():
         pygame.init()
 
         music = pygame.mixer.music
-        music.load("Play Roulette.mp3")
+        music.load("resources/Play Roulette.mp3")
         music.play(loops=-1)
 
         menu.start(name)
-
 
     name, password = parse.get_args()
     auth = bdclass.Auth(name, password)

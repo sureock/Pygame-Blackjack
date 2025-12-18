@@ -1,3 +1,5 @@
+"""Модуль меню"""
+
 import pygame
 import game
 import setups
@@ -11,6 +13,11 @@ gray = (25, 25, 25)
 
 
 def start(name):
+    """Метод, отвечающий за создание меню и кнопок в нём.
+
+    Args:
+        name: имя игрока, которое будет передано в game.
+    """
 
     button_surface = pygame.Surface((0, 0))
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -20,7 +27,7 @@ def start(name):
     pygame.font.match_font('font.otf')
     font = pygame.font.Font('font.otf', 20)
 
-    tname = pygame.image.load('logo.png').convert_alpha()
+    tname = pygame.image.load('resources/logo.png').convert_alpha()
     text_name = utils.Text(tname,
                            screen.get_size(),
                            ((width - (tname.get_size()[0] // 2) * (width / 1000)) // 2,
@@ -33,7 +40,7 @@ def start(name):
                         screen.get_size(),
                         ((width - t4.get_size()[0] * (width / 1000)) // 2,
                          height - t4_param * height / 750))
-    
+
     t3 = font.render("LEADERBOARD", True, white, gray)
     t3_param = t4_param + t3.get_size()[1] + 5
     text_3 = utils.Text(t3,
@@ -55,7 +62,8 @@ def start(name):
                         ((width - t1.get_size()[0] * width / 1000) // 2,
                          height - t1_param * height / 750))
 
-    background = utils.AnimatedBackground("back_animation.gif", width, height)
+    background = utils.AnimatedBackground("resources/back_animation.gif",
+                                          width, height)
 
     running = True
     while running:
@@ -98,4 +106,3 @@ def start(name):
         screen.blit(text_4.text_scale, text_4.text_rect)
 
         pygame.display.flip()
-

@@ -1,3 +1,5 @@
+"""Главный модуль, отвечающий за игровой процесс."""
+
 import pygame
 # import gc
 from deck import deck52
@@ -11,7 +13,7 @@ fps = 60
 white = (255, 255, 255)
 gray = (25, 25, 25)
 razmer_def = (63, 89)
-deck_image = pygame.image.load('deck1.jpg')
+deck_image = pygame.image.load('resources/deck1.jpg')
 scaled_deck = pygame.transform.scale_by(deck_image, 1.7)
 
 # загрузка карт
@@ -19,9 +21,15 @@ cards = card_load()
 
 
 def start(name):
+    """Метод игры. Отвечает за стол, логику игры и анимации.
+
+    Args:
+        name: имя игрока для сохранения статистики.
+    """
+
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     WIDTH, HEIGHT = screen.get_size()
-    background = pygame.image.load('board.png')
+    background = pygame.image.load('resources/board.png')
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
     pygame.display.set_caption('blackjack')
     clock = pygame.time.Clock()
@@ -48,20 +56,22 @@ def start(name):
     game_started = False
     game_over = True
 
-    start_button = Button(50, HEIGHT - 120, 200, 60, "Начать игру")
-    card_button = Button(WIDTH // 2 - 100, HEIGHT - 160, 200, 60, "Взять карту"
+    start_button = Button(50, HEIGHT - 380, 200, 60, "Начать игру")
+    card_button = Button(50, HEIGHT - 160, 200, 60, "Взять карту"
                          )
-    pass_button = Button(WIDTH // 2 - 100, HEIGHT - 80, 200, 60, "Пас",
+    pass_button = Button(50, HEIGHT - 80, 200, 60, "Пас",
                          color=(255, 100, 100), hover_color=(255, 150, 150))
     exit_button = Button(WIDTH - 250, HEIGHT - 120, 200, 60, "Выход",
                          color=(255, 100, 100), hover_color=(255, 150, 150))
-    start_again_button = Button(50, HEIGHT - 120, 200, 60, "Начать заново")
+    start_again_button = Button(50, HEIGHT - 380, 200, 60, "Начать заново")
 
     # Шрифты
     font = pygame.font.Font('font.otf', 30)
     # card_font = pygame.font.Font('font.otf', 15)
 
     def draw_player():
+        """Метод получения карты игроком."""
+
         suit, (rank, value) = deck.draw()
         card_data = (suit, rank, value)
         player_hand.append(card_data)
@@ -73,6 +83,8 @@ def start(name):
         player_card_animations.append(anim)
 
     def draw_dealer():
+        """Метод получения карты дилером."""
+
         suit, (rank, value) = deck.draw()
         card_data = (suit, rank, value)
         dealer_hand.append(card_data)
@@ -197,10 +209,6 @@ def start(name):
             # Рисуем карту в текущей позиции анимации
             screen.blit(card_surface, anim.current_pos)
 
-        # Очки игрока
-        # score_text = font.render(f"Очки игрока: {PLAYER}", True, white)
-        # screen.blit(score_text, (50, 250))
-
         # Карты дилера (отрисовываем с анимацией)
         for i, anim in enumerate(dealer_card_animations):
             # Создаем поверхность для карты
@@ -222,11 +230,6 @@ def start(name):
 
             # Рисуем карту в текущей позиции анимации
             screen.blit(card_surface, anim.current_pos)
-
-        # Очки дилера (показываем только после паса или если игрок проиграл)
-        # dealer_text = f"Очки дилера: {DILER if game_over else '??'}"
-        # dealer_score_text = font.render(dealer_text, True, white)
-        # screen.blit(dealer_score_text, (50, 450))
 
         if winner_text:
             winner_render = font.render(winner_text, True, (255, 255, 255))

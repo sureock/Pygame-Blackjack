@@ -1,6 +1,7 @@
+"""Модуль настроек."""
+
 import pygame
 import utils
-import menu
 from sys import exit
 
 fps = 24
@@ -9,6 +10,8 @@ gray = (25, 25, 25)
 
 
 def start():
+    """Метод создания кнопок в окне Setups.
+    """
 
     button_surface = pygame.Surface((0, 0))
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -39,11 +42,11 @@ def start():
                           0,
                           1)
 
-    t2 = font_setup.render("Deck Back View", True, white)
-    add_height_1 = add_height + t1.get_size()[1] + 25
-    text_2 = utils.Text(t2,
-                        screen.get_size(),
-                        (25 * width_relative, add_height_1 * height_relative))
+    # t2 = font_setup.render("Deck Back View", True, white)
+    # add_height_1 = add_height + t1.get_size()[1] + 25
+    # text_2 = utils.Text(t2,
+    #                     screen.get_size(),
+    #                     (25 * width_relative, add_height_1 * height_relative))
 
     t3 = font_setup.render("BACK", True, white)
     t3_width, t3_height = t3.get_size()
@@ -80,13 +83,10 @@ def start():
 
         screen.fill(gray)
         screen.blit(text_name.text_scale, text_name.text_rect)
-        # screen.blit(button_surface,(button_1_rect.x, button_1_rect.y))
-        # screen.blit(button_surface,(button_2_rect.x, button_2_rect.y))
         screen.blit(button_surface, (button_3_rect.x, button_3_rect.y))
         screen.blit(text_1.text_scale, text_1.text_rect)
-        screen.blit(text_2.text_scale, text_2.text_rect)
+        # screen.blit(text_2.text_scale, text_2.text_rect)
         screen.blit(text_3.text_scale, text_3.text_rect)
 
         slider.render(screen)
         pygame.display.update()
-

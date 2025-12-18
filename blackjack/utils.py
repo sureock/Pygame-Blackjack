@@ -1,3 +1,5 @@
+"""Модуль классов, применяющихся в проекте."""
+
 import pygame
 import math
 import os
@@ -6,12 +8,10 @@ from PIL import Image, ImageSequence
 
 # здесь будет подгрузка карт из папок
 def card_load():
-    """Создание словаря{(масть, достоинство)->путь к изображению}
+    """Метод создания словаря карт.
 
     Returns:
-        dict
-    Raises:
-
+        cards_suits: словарь путей {(масть, достоинство)->путь к изображению}.
     """
 
     cwd = os.getcwd()
@@ -27,6 +27,9 @@ def card_load():
 
 # Класс для анимации карты
 class CardAnimation:
+    """Класс анимаций карт.
+    """
+
     def __init__(self, card_data, target_pos, start_pos=None, speed=5000):
         self.suit = card_data[0]
         self.rank = card_data[1]
@@ -49,16 +52,19 @@ class CardAnimation:
 
 
 def move_image(start_pos, target_pos, speed, current_pos=None):
-    """
-    Линейное движение к цели
-    Возвращает новую позицию и флаг достижения цели
+    """Метод линейного движения к цели.
+    Возвращает новую позицию и флаг достижения цели.
 
-    :param start_pos: начальная позиция (x, y)
-    :param target_pos: целевая позиция (x, y)
-    :param speed: скорость перемещения (пикселей за кадр)
-    :param current_pos: текущая позиция (для продолжения движения)
-    :return: (новая позиция, достигнута ли цель)
+    Args:
+        start_pos: начальная позиция (x, y).
+        target_pos: целевая позиция (x, y).
+        speed: скорость перемещения (пикселей за кадр).
+        current_pos: текущая позиция (для продолжения движения).
+
+    Returns:
+        tuple: новая позиция (list), достигнута ли цель (bool)
     """
+
     if current_pos is None:
         current_pos = list(start_pos)
 
@@ -84,8 +90,16 @@ def move_image(start_pos, target_pos, speed, current_pos=None):
     return current_pos, False
 
 
-# расчет хрен знает чего
 def calculate_score(hand):
+    """Метод расчёта суммы очков в руке.
+
+    Args:
+        hand: текущая рука.
+
+    Returns:
+        int: сумма очков
+    """
+
     total = 0
     aces = 0
 
@@ -103,15 +117,44 @@ def calculate_score(hand):
 
 
 class Text:
+    """Класс создания текста и получения параметров для его вывода в окне.
+    """
+
     def __init__(self, text, screen_size, topleft_param, logo=False):
+        """Метод инициации класса.
+
+        Args:
+            text: текст либо изображение.
+            screen_size: размер экрана.
+            topleft_param: точка отрисовки.
+            logo: флаг для лого.
+        """
 
         def get_relative_width(x, y):
+            """Метод получения относительной ширины.
+
+            Returns:
+                float: относительная ширина
+            """
+
             return x * y
 
         def get_relative_height(x, y):
+            """Метод получения относительной высоты.
+
+            Returns:
+                float: относительная высоты.
+            """
+
             return x * y
 
         def scale(x, y):
+            """Метод изменения размера.
+
+            Returns:
+                float: текст, измененного размера.
+            """
+
             return pygame.transform.scale(x, y)
 
         self.width = screen_size[0]
@@ -148,12 +191,25 @@ class Text:
 
 
 class Slider:
+    """Класс слайдера.
+    """
+
     def __init__(self,
                  pos: tuple,
                  size: tuple,
                  initial_val: float,
                  min: int,
                  max: int):
+        """Метод инициации класса.
+
+        Args:
+            pos: местоположение.
+            size: размер.
+            initial_val: десятичная дробь.
+            min: минимальное значение.
+            max: максимальное значение.
+        """
+
         self.pos = pos
         self.size = size
 
@@ -175,13 +231,25 @@ class Slider:
                                        self.size[1])
 
     def move_slider(self, mouse_pos):
+        """Метод движения слайдера.
+        """
+
         self.button_rect.centerx = mouse_pos[0]
 
     def render(self, screen):
+        """Метод рендера слайдера.
+        """
+
         pygame.draw.rect(screen, 'darkgray', self.container_rect)
         pygame.draw.rect(screen, 'blue', self.button_rect)
 
     def get_value(self):
+        """Метод получения значения от местоположения слайдера.
+
+        Returns:
+            float: значение от местоположения слайдера.
+        """
+
         val_range = self.right_pos - self.left_pos - 1
         button_val = self.button_rect.centerx - self.left_pos
 
@@ -189,10 +257,26 @@ class Slider:
 
 
 class Button:
+    """Класс кнопки.
+    """
+
     def __init__(self, x, y, width, height, text,
                  color=(200, 200, 200),
                  hover_color=(170, 170, 170),
                  text_color=(0, 0, 0)):
+        """Метод инициации класса.
+
+        Args:
+            x: координата по x.
+            y: координата по y.
+            width: ширина кнопки.
+            height: высота кнопки.
+            text: текст кнопки.
+            color: цвет кнопки.
+            hover_color: цвет кнопки при наведении мыши.
+            text_color: цыет текста кнопки.
+        """
+
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
         self.color = color
@@ -202,6 +286,15 @@ class Button:
         self.active = True
 
     def draw(self, surface):
+        """Метод создания кнопки в окне.
+
+        Args:
+            surface: окно, на котором будет создана кнопка.
+
+        Returns:
+            None: если кнопка не активна.
+        """
+
         if not self.active:
             return
         mouse_pos = pygame.mouse.get_pos()
@@ -218,13 +311,29 @@ class Button:
         surface.blit(text_surf, text_rect)
 
     def is_clicked(self, mouse_pos, clicked):
+        """Метод считывания нажатия.
+
+        Returns:
+            bool: ЛКМ нажата и мышь находится на кнопке.
+        """
+
         return self.rect.collidepoint(mouse_pos) and clicked
 
 
 class AnimatedBackground:
+    """Класс анимирования заднего фона
+    """
+
     animations = {}
 
     def __init__(self, gif_path, screen_width, screen_height):
+        """Метод инициации класса.
+
+        Args:
+            gif_path: направление к гифке.
+            screen_width: ширина экрана.
+            screen_height: высота экрана.
+        """
 
         def load_gif_frames(path):
             """Загружает все кадры GIF"""
